@@ -12,4 +12,6 @@ set(3RDPARTY_LIB ${3RDPARTY}/lib)
 
 set(CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR}/install)
 
+link_directories(${3RDPARTY_LIB})
+
 add_subdirectory(src)
