@@ -9,6 +9,8 @@ target_include_directories(ice-engine PUBLIC include)
 target_include_directories(ice-engine PUBLIC ${3RDPARTY_INCLUDE})
 target_link_libraries(ice-engine json11 capnp uv uWS)
 
+set_target_properties(ice-engine PROPERTIES LINKER_LANGUAGE CXX)
+
 install(TARGETS ice-engine
         LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
         ARCHIVE DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
@@ -16,3 +18,4 @@ install(TARGETS ice-engine
 install(DIRECTORY include/ 
         DESTINATION ${CMAKE_INSTALL_PREFIX}/include
         PATTERN "include/*.h")
+
