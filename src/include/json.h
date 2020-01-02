@@ -3,18 +3,16 @@
 namespace ice
 {
     template<typename T>
-    std::pair<bool, T> getJsonPrimitive(const json11::Json & jsonData,
+    std::pair<bool, T> get_json_primitive(const json11::Json & jsonData,
             const std::string & keyword, const bool throwExceptionWhenMissing)
     {
-        json11::Json obj = jsonData[keyword];
+        json11::Json obj = json_data[keyword];
 
-        // Create a default return with indication value was not found.
         std::pair<bool, T> ret(false, T());
 
-        // If value is missing, throw an exception if necessary.
         if (!obj.is_null())
         {
-            ret = std::make_pair(true, std::move(convertJsonValue<T>(obj)));
+            ret = std::make_pair(true, std::move(convert_json_value<T>(obj)));
         }
         else
         {
@@ -51,26 +49,20 @@ public:
 
 protected:
     template<typename T>
-    T getValue(const std::string & kw) const
+    T get_value(const std::string & kw) const
         {
             T v;
             std::tie(std::ignore, v) =
-                /*
-                 * because this function swallows the boolean returned by
-                 * getJsonPrimitive, it has to allow the exception to be
-                 * thrown when the value is missing so that the caller has
-                 * some way to know that the returned value is invalid
-                 */
-                getJsonPrimitive<T>(get_data(), kw, true);
+                get_json_primitive<T>(get_data(), kw, true);
             return v;
         }
 
     template <typename T>
-    bool hasValue(const std::string & kw) const
+    bool has_value(const std::string & kw) const
         {
             bool ret;
             std::tie(ret, std::ignore) =
-                getJsonPrimitive<T>(get_data(), kw, false);
+                get_json_primitive<T>(get_data(), kw, false);
             return ret;
         }
 
@@ -88,7 +80,7 @@ protected:
 
 
 #define BEGIN_JSON_OBJECT(OBJECT_NAME)                                  \
-    class OBJECT_NAME : public ::ice::json::JSON {                   \
+    class OBJECT_NAME : public JSON {                   \
     private:                                                            \
         Json::object m_data;                                    \
     protected:                                                          \
@@ -124,11 +116,11 @@ protected:
     public:                                                             \
         bool has_##NAME() const                                         \
         {                                                               \
-            return hasValue<NAME##_t>(NAME##_word);                     \
+            return has_value<NAME##_t>(NAME##_word);                     \
         }                                                               \
         NAME##_t get_##NAME() const                                     \
         {                                                               \
-            return getValue<NAME##_t>(NAME##_word);                     \
+            return get_value<NAME##_t>(NAME##_word);                     \
         }                                                               \
         void set_##NAME(const NAME##_t & value)                         \
         {                                                               \
@@ -161,11 +153,11 @@ protected:
     public:                                                             \
         bool has_##NAME() const                                         \
         {                                                               \
-            return hasValue<NAME##_t>(NAME##_word);                     \
+            return has_value<NAME##_t>(NAME##_word);                     \
         }                                                               \
         NAME##_t get_##NAME() const                                     \
         {                                                               \
-            return getValue<NAME##_t>(NAME##_word);                     \
+            return get_value<NAME##_t>(NAME##_word);                     \
         }                                                               \
         void set_##NAME(const NAME##_t & value)                         \
         {                                                               \
@@ -223,11 +215,11 @@ protected:
     public:                                                             \
         bool has_##NAME() const                                         \
         {                                                               \
-            return hasValue<Json::array>(NAME##_word);          \
+            return has_value<Json::array>(NAME##_word);          \
         }                                                               \
         Json::array get_##NAME() const                          \
         {                                                               \
-            return getValue<Json::array>(NAME##_word);          \
+            return get_value<Json::array>(NAME##_word);          \
         }                                                               \
         void set_##NAME(const Json::array & value)              \
         {                                                               \
@@ -324,12 +316,12 @@ protected:
         }                                                               \
         bool has_##NAME() const                                         \
         {                                                               \
-            return hasValue<Json::object>(NAME##_word);         \
+            return has_value<Json::object>(NAME##_word);         \
         }                                                               \
         NAME##_t get_##NAME() const                                     \
         {                                                               \
             return NAME##_t(                                            \
-                getValue<Json::object>(                         \
+                get_value<Json::object>(                         \
                     NAME##_word));                                      \
         }                                                               \
         void remove_##NAME(void)                                        \

@@ -1,5 +1,6 @@
 #include <kj/common.h>
-#include <json11.hpp>
+#include <json11/json11.hpp>
+
 namespace ice
 {
     typedef kj::byte byte_type;
