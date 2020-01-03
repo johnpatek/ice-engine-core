@@ -2,6 +2,11 @@
 
 namespace ice
 {
+namespace core
+{
+/*
+class filesystem
+{
     std::string pwd();
 
     std::vector<std::string> ls(const std::string& path);
@@ -13,4 +18,7 @@ namespace ice
     void rm(const std::string& path);
 
     void rdmdir(const std::string& path);
+};
+*/
+}
 }

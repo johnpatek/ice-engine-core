@@ -4,6 +4,8 @@ project(ice-engine-core)
 
 set(CXX_STANDARD 11)
 
+include(CTest)
+
 set(3RDPARTY ../ice-engine-3rdparty/install)
 
 set(3RDPARTY_INCLUDE ${3RDPARTY}/include)
