@@ -49,20 +49,42 @@ namespace core {
 
     memory_pool::memory_pool(const size_type size)
     {
-        _first_block = std::unique_ptr<ice::core::byte_type[]>(
+        _data = std::unique_ptr<ice::core::byte_type[]>(
             new ice::core::byte_type[size + CHUNK_OVERHEAD]);
-        
+        memory_chunk first(size);
+        first.write((void*)_data.get());
     }
    
     byte_type * memory_pool::allocate_block(const size_type size)
     {
-        return NULL;
+        byte_type * result(NULL);
+        
+        size_type required(size + CHUNK_OVERHEAD);
+        
+        memory_chunk * search_block(
+            (memory_chunk*)_data.get());
+        
+        while(
+            (search_block != NULL) 
+            && ((search_block->get_size() < required) 
+                || !search_block->is_free()))
+        {
+            search_block = search_block->next;
+        }
+
+        if(search_block != NULL)
+        {
+            byte_type * data = (byte_type*)search_block;
+            
+        }
+
+        return result;
     }
 
     void memory_pool::deallocate_block(
         byte_type* block)
     {
-        
+
     }
 
     byte_type* memory_pool::reallocate_block(

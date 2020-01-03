@@ -54,7 +54,8 @@ public:
         const size_type size);
 private:
     mutable std::mutex _mutex;
-    std::unique_ptr<ice::core::byte_type[]> _first_block;
+    std::unique_ptr<ice::core::byte_type[]> _data;
+    size_type _free_size;
 };
 
 template <class T>
