@@ -1,5 +1,7 @@
 #include "core/types.h"
 #include "core/memory.h"
+
+#include <iostream>
 namespace ice { 
 namespace core {
 
@@ -80,6 +82,7 @@ namespace core {
             data = (byte_type*)search_block;
             remaining_size = search_block->get_size() - required_size;
             _free_size -= required_size;
+            search_block->set_free(false);
             result = data + CHUNK_OVERHEAD;
         }
 
@@ -97,7 +100,6 @@ namespace core {
             }
             search_block->next = free_data;
             search_block->set_size(size);
-            _free_size -= CHUNK_OVERHEAD;
         }
 
         return result;
@@ -114,7 +116,7 @@ namespace core {
         if((data != NULL) && !(block->is_free()))
         {
             block->set_free(true);
-            _free_size += block->get_size();
+            _free_size += block->get_size() + CHUNK_OVERHEAD;
         }
 
         if(block->prev)
@@ -166,7 +168,17 @@ namespace core {
 
     size_type memory_pool::get_free_size() const
     {
-        return _free_size;
+        size_type result(0);
+        auto data = (memory_chunk*)_data.get();
+        do
+        {
+            if(data->is_free())
+            {
+                result += data->get_size();
+            }
+            data = data->next;
+        }while(data);
+        return result;
     }
 }
 }

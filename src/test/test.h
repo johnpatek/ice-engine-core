@@ -16,7 +16,7 @@
   }                                                                 \
 }
 
-#define ICE_UNIT_TEST                                             \
+#define ICE_UNIT_TEST                                               \
 static void unit_test();                                            \
 int main(const int argc, const char ** argv)                        \
 {                                                                   \
@@ -27,12 +27,16 @@ int main(const int argc, const char ** argv)                        \
     }                                                               \
     catch(const std::exception& e)                                  \
     {                                                               \
-        std::ofstream log(                                          \
-            "/tmp/Test.log",                                        \
-            std::ios::out | std::ios::app);                         \
-        log << e.what() << std::endl;                               \
         status = EXIT_FAILURE;                                      \
     }                                                               \
     return status;                                                  \
 }                                                                   \
 static void unit_test()
+
+#define ICE_LOG_TEST_CASE(test_case,test_log)                       \
+try                                                                 \
+{                                                                   \
+    test_case();                                                    \
+}catch(const std::exception& e){                                    \
+    test_log << e.what() << std::endl;                              \
+}

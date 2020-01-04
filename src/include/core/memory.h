@@ -2,6 +2,7 @@
 #include <vector>
 #include <mutex>
 #include <cstring>
+#include <iostream>
 
 namespace ice
 {
@@ -65,7 +66,7 @@ template <class T>
 class pool_allocator
 {
 private:
-std::shared_ptr<memory_pool> _pool;
+    std::shared_ptr<memory_pool> _pool;
 public:
     typedef size_t    size_type;
     typedef ptrdiff_t difference_type;
@@ -94,7 +95,8 @@ public:
         size_type n, 
         const void * p = 0) 
     {
-        return _pool->allocate_block((size_type)n);
+        std::cerr << "allocate" << std::endl;
+        return (T*)_pool->allocate_block(n);
     }
 
     void deallocate(
@@ -103,6 +105,7 @@ public:
     {
         if (p != NULL) 
         {
+            std::cerr << "deallocate" << std::endl;
             _pool->deallocate_block((byte_type*)p);
             p = NULL;
         }
@@ -136,8 +139,7 @@ public:
     void destroy(
         pointer p) 
     { 
-        p->~T();
-        deallocate(p); 
+        p->~T(); 
     }
 
     size_type max_size() const 
@@ -164,11 +166,17 @@ public:
     { 
         return *this; 
     }
+
+    std::shared_ptr<memory_pool> get_pool()
+    {
+        return _pool;
+    }
 };
+
+
 
 typedef std::vector<byte_type,std::allocator<byte_type>> heap_buffer;
 typedef std::vector<byte_type,pool_allocator<byte_type>> pool_buffer;
-
 
 }
 }

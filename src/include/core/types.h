@@ -7,6 +7,6 @@ namespace core
 {
     typedef kj::byte byte_type;
     typedef size_t size_type;
-    typedef json11::Json Json;
+    typedef json11::Json json;
 }
 }
