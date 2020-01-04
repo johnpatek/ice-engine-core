@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0)
 
 project(ice-engine-core)
 
-set(CXX_STANDARD 11)
+set(CXX_STANDARD 14)
 
 include(CTest)
 

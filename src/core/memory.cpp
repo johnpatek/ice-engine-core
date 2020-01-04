@@ -50,23 +50,26 @@ namespace core {
     memory_pool::memory_pool(const size_type size)
     {
         _data = std::unique_ptr<ice::core::byte_type[]>(
-            new ice::core::byte_type[size + CHUNK_OVERHEAD]);
-        memory_chunk first(size);
+            new ice::core::byte_type[size]);
+        _free_size = size - CHUNK_OVERHEAD;
+        memory_chunk first(_free_size);
         first.write((void*)_data.get());
     }
    
     byte_type * memory_pool::allocate_block(const size_type size)
     {
         byte_type * result(NULL);
-        
-        size_type required(size + CHUNK_OVERHEAD);
-        
+        byte_type * data;
+        size_type required_size(size + CHUNK_OVERHEAD);
+        size_type remaining_size(0);
+        memory_chunk * following_block;
+
         memory_chunk * search_block(
             (memory_chunk*)_data.get());
         
         while(
             (search_block != NULL) 
-            && ((search_block->get_size() < required) 
+            && ((search_block->get_size() < required_size) 
                 || !search_block->is_free()))
         {
             search_block = search_block->next;
@@ -74,26 +77,96 @@ namespace core {
 
         if(search_block != NULL)
         {
-            byte_type * data = (byte_type*)search_block;
-            
+            data = (byte_type*)search_block;
+            remaining_size = search_block->get_size() - required_size;
+            _free_size -= required_size;
+            result = data + CHUNK_OVERHEAD;
+        }
+
+
+        if(remaining_size > CHUNK_OVERHEAD)
+        {
+            memory_chunk free_block(remaining_size);
+            memory_chunk* free_data = (memory_chunk*)(data + required_size);
+            free_block.next = search_block->next;
+            free_block.prev = search_block;
+            free_block.write(free_data);
+            if(free_block.next)
+            {
+                free_block.next->prev = free_data;
+            }
+            search_block->next = free_data;
+            search_block->set_size(size);
+            _free_size -= CHUNK_OVERHEAD;
         }
 
         return result;
     }
 
     void memory_pool::deallocate_block(
-        byte_type* block)
+        byte_type* data)
     {
+        memory_chunk* block;
+        bool join_prev(false);
+        bool join_next(false);
+        block = (
+            memory_chunk*)(data - CHUNK_OVERHEAD);
+        if((data != NULL) && !(block->is_free()))
+        {
+            block->set_free(true);
+            _free_size += block->get_size();
+        }
 
+        if(block->prev)
+        {
+            join_prev = block->prev->is_free();
+        }
+
+        if(block->next)
+        {    
+            join_next = block->next->is_free();
+        }
+
+        if(join_next)
+        {
+            block->set_size(
+                block->get_size() 
+                + block->next->get_size() 
+                + CHUNK_OVERHEAD);
+            block->next = block->next->next;
+            if(block->next)
+            {
+                block->next->prev = block;
+            }
+        }
+
+        if(join_prev)
+        {
+            block->prev->set_size(
+                block->prev->get_size() 
+                + block->get_size() 
+                + CHUNK_OVERHEAD);
+            if(block->next)
+            {
+                block->next->prev = block;
+            }
+            if(block->prev)
+            {
+                block->prev->next = block->next;
+            }
+        }
     }
 
     byte_type* memory_pool::reallocate_block(
-        byte_type* block, 
+        byte_type* data, 
         const size_type size)
     {
         return NULL;
     }
 
-
+    size_type memory_pool::get_free_size() const
+    {
+        return _free_size;
+    }
 }
 }

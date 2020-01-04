@@ -52,6 +52,9 @@ public:
     byte_type* reallocate_block(
         byte_type* block, 
         const size_type size);
+
+    size_type get_free_size() const;
+    
 private:
     mutable std::mutex _mutex;
     std::unique_ptr<ice::core::byte_type[]> _data;
