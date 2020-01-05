@@ -95,7 +95,6 @@ public:
         size_type n, 
         const void * p = 0) 
     {
-        std::cerr << "allocate" << std::endl;
         return (T*)_pool->allocate_block(n);
     }
 
@@ -105,7 +104,6 @@ public:
     {
         if (p != NULL) 
         {
-            std::cerr << "deallocate" << std::endl;
             _pool->deallocate_block((byte_type*)p);
             p = NULL;
         }

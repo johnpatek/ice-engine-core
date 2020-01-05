@@ -1,7 +1,6 @@
 #include "core/types.h"
 #include "core/memory.h"
 
-#include <iostream>
 namespace ice { 
 namespace core {
 
