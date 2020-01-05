@@ -4,17 +4,17 @@ file(GLOB ENGINE_CORE_SOURCES
 )
 
 include_directories(include)
-add_library(ice-engine SHARED ${ENGINE_CORE_SOURCES})
+add_library(ice-engine-core SHARED ${ENGINE_CORE_SOURCES})
 
-target_include_directories(ice-engine PUBLIC include)
-target_include_directories(ice-engine PUBLIC ${3RDPARTY_INCLUDE})
-target_link_libraries(ice-engine json11 capnp uv uWS pthread)
+target_include_directories(ice-engine-core PUBLIC include)
+target_include_directories(ice-engine-core PUBLIC ${3RDPARTY_INCLUDE})
+target_link_libraries(ice-engine-core json11 capnp uv uWS pthread)
 
-set_target_properties(ice-engine PROPERTIES LINKER_LANGUAGE CXX)
+set_target_properties(ice-engine-core PROPERTIES LINKER_LANGUAGE CXX)
 
 add_subdirectory(test)
 
-install(TARGETS ice-engine
+install(TARGETS ice-engine-core
         LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib
         ARCHIVE DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
         
