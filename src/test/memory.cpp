@@ -144,7 +144,7 @@ ICE_TEST_CASE(buffer_test)
 
 ICE_UNIT_TEST
 {
-    ICE_LOG_TEST_CASE(pool_test,std::cerr)
-    ICE_LOG_TEST_CASE(allocator_test,std::cerr)
-    ICE_LOG_TEST_CASE(buffer_test,std::cerr)
+    pool_test();
+    allocator_test();
+    buffer_test();
 }

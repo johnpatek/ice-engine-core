@@ -2,8 +2,7 @@
 #include <chrono>
 #include <fstream>
 
-#define ICE_TEST_CASE(test_case) static void test_case()
-#define ICE_TEST_ASSERT(X)                                        \
+#define ICE_TEST_ASSERT(X)                                          \
 {                                                                   \
   if( !( X ) )                                                      \
   {                                                                 \
@@ -33,10 +32,4 @@ int main(const int argc, const char ** argv)                        \
 }                                                                   \
 static void unit_test()
 
-#define ICE_LOG_TEST_CASE(test_case,test_log)                       \
-try                                                                 \
-{                                                                   \
-    test_case();                                                    \
-}catch(const std::exception& e){                                    \
-    test_log << e.what() << std::endl;                              \
-}
+#define ICE_TEST_CASE(test_case) static void test_case()

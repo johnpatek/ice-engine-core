@@ -4,9 +4,18 @@ namespace ice
 {
 namespace core
 {
-/*
-class filesystem
+
+class file
 {
+public:
+    file();
+    file(const std::string& path);
+    
+};
+
+class system
+{
+public:
     std::string pwd();
 
     std::vector<std::string> ls(const std::string& path);
@@ -19,6 +28,6 @@ class filesystem
 
     void rdmdir(const std::string& path);
 };
-*/
+
 }
 }

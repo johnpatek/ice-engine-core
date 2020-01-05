@@ -8,7 +8,7 @@ add_library(ice-engine SHARED ${ENGINE_CORE_SOURCES})
 
 target_include_directories(ice-engine PUBLIC include)
 target_include_directories(ice-engine PUBLIC ${3RDPARTY_INCLUDE})
-target_link_libraries(ice-engine json11 capnp uv uWS)
+target_link_libraries(ice-engine json11 capnp uv uWS pthread)
 
 set_target_properties(ice-engine PROPERTIES LINKER_LANGUAGE CXX)
 
