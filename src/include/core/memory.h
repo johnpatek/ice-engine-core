@@ -89,7 +89,8 @@ public:
     pool_allocator(
         const pool_allocator& other) = default;
 
-
+    pool_allocator(
+        pool_allocator&& other) = default;
 
     pointer allocate(
         size_type n, 
