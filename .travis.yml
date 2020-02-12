@@ -2,4 +2,7 @@ language: cpp
 
 script:
   - cd ..
-  - cd ice-engine-core
+  - git clone https://github.com/johnpatek/ice-engine-3rdparty.git
+  - cd ice-engine-3rdparty
+  - git submodule update --init --recursive
+  - ./cmake.sh
