@@ -1,8 +1,11 @@
-#include "core/types.h"
+#ifndef MEMORY_H
+#define MEMORY_H
+#include "types.h"
 #include <vector>
 #include <mutex>
 #include <cstring>
 #include <iostream>
+#include <memory>
 
 namespace ice
 {
@@ -57,7 +60,6 @@ public:
     size_type get_free_size() const;
     
 private:
-    mutable std::mutex _mutex;
     std::unique_ptr<ice::core::byte_type[]> _data;
     size_type _free_size;
 };
@@ -172,10 +174,15 @@ public:
     }
 };
 
+template<int size> struct stack_buffer : public std::array<byte_type,size>
+{
 
+};
 
 typedef std::vector<byte_type,std::allocator<byte_type>> heap_buffer;
+
 typedef std::vector<byte_type,pool_allocator<byte_type>> pool_buffer;
 
 }
 }
+#endif

@@ -6,9 +6,9 @@ file(GLOB ENGINE_CORE_SOURCES
 include_directories(include)
 add_library(ice-engine-core SHARED ${ENGINE_CORE_SOURCES})
 
-target_include_directories(ice-engine-core PUBLIC include)
-target_include_directories(ice-engine-core PUBLIC ${3RDPARTY_INCLUDE})
-target_link_libraries(ice-engine-core json11 capnp uv uWS pthread)
+target_include_directories(ice-engine-core PRIVATE include)
+target_include_directories(ice-engine-core PRIVATE ${3RDPARTY_INCLUDE})
+target_link_libraries(ice-engine-core pthread cpprest)
 
 set_target_properties(ice-engine-core PROPERTIES LINKER_LANGUAGE CXX)
 

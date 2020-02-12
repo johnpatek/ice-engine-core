@@ -1,13 +1,8 @@
-include_directories(${PROJECT_SOURCE_DIR}/src/include)
+file(GLOB TEST_SOURCES
+    "*.h"    
+    "*.cpp"
+)
 
-add_executable(memory_test memory.cpp)
-add_executable(multithreading_test multithreading.cpp)
-
-target_include_directories(memory_test PUBLIC ${PROJECT_SOURCE_DIR}/src/include)
-target_include_directories(multithreading_test PUBLIC ${PROJECT_SOURCE_DIR}/src/include)
-
-target_link_libraries(memory_test ice-engine-core)
-target_link_libraries(multithreading_test ice-engine-core)
-
-add_test(NAME memory COMMAND memory_test)
-add_test(NAME multithreading COMMAND multithreading_test)
+add_executable(unittest ${TEST_SOURCES})
+target_include_directories(unittest PRIVATE ${PROJECT_SOURCE_DIR}/src/include ${3RDPARTY_INCLUDE})
+target_link_libraries(unittest gtest gtest_main ice-engine-core)

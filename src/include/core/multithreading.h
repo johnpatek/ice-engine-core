@@ -1,3 +1,5 @@
+#ifndef MULTITHREADING_H
+#define MULTITHREADING_H
 #include "core/memory.h"
 #include "core/types.h"
 #include <future>
@@ -93,3 +95,5 @@ public:
 
 }
 }
+
+#endif

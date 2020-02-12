@@ -1,12 +1,12 @@
-#include <kj/common.h>
-#include <json11/json11.hpp>
-
+#ifndef TYPES_H
+#define TYPES_H
+#include <numeric>
 namespace ice
 {
 namespace core
 {
-    typedef kj::byte byte_type;
-    typedef size_t size_type;
-    typedef json11::Json json;
+    typedef unsigned char byte_type;
+    typedef std::size_t size_type;
 }
 }
+#endif
