@@ -4,8 +4,6 @@ project(ice-engine-core)
 
 SET(CMAKE_CXX_FLAGS  "-std=c++14 -Wall -Werror")
 
-include(CTest)
-
 set(3RDPARTY ../ice-engine-3rdparty/install)
 
 set(3RDPARTY_INCLUDE ${3RDPARTY}/include)
