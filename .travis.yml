@@ -7,3 +7,6 @@ script:
   - git submodule update --init --recursive
   - sudo apt-get install libboost-all-dev
   - ./cmake.sh
+  - cd ../ice-engine-core
+  - ./cmake.sh
+  - ./build/src/test/unittest
