@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0)
 
 project(ice-engine-core)
 
-set(CXX_STANDARD 14)
+SET(CMAKE_CXX_FLAGS  "-std=c++14 -Wall -Werror")
 
 include(CTest)
 
