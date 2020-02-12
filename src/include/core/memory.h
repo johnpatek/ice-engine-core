@@ -71,7 +71,7 @@ private:
     std::shared_ptr<memory_pool> _pool;
 public:
     typedef size_t    size_type;
-    typedef ptrdiff_t difference_type;
+    typedef long difference_type;
     typedef T*        pointer;
     typedef const T*  const_pointer;
     typedef T&        reference;

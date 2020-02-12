@@ -63,7 +63,6 @@ namespace core {
         byte_type * data;
         size_type required_size(size + CHUNK_OVERHEAD);
         size_type remaining_size(0);
-        memory_chunk * following_block;
 
         memory_chunk * search_block(
             (memory_chunk*)_data.get());
