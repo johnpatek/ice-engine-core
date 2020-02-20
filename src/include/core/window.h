@@ -2,7 +2,6 @@
 #define WINDOW_H
 #include <core/types.h>
 #include <core/memory.h>
-#include <SDL2/SDL.h>
 
 namespace ice
 {
