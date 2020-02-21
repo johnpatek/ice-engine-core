@@ -7,6 +7,22 @@ namespace ice
 {
 namespace core
 {
+    enum subsystem_flag
+    {
+        TIMER = SDL_INIT_TIMER,
+        AUDIO = SDL_INIT_AUDIO,
+        VIDEO = SDL_INIT_VIDEO,
+        JOYSTICK = SDL_INIT_JOYSTICK,
+        HAPTIC = SDL_INIT_HAPTIC,
+        GAMMECONTROLLER = SDL_INIT_GAMECONTROLLER,
+        EVENTS = SDL_INIT_EVENTS,
+        EVERYTHING = SDL_INIT_EVERYTHING
+    };
+
+    static void init_sdl(const subsystem_flag subsystems);
+    
+    static void shutdown_sdl();
+    
     enum window_flag
     {
         NONE = 0,
@@ -19,7 +35,7 @@ namespace core
     class window
     {
     private:
-        SDL_Window* _window;
+        window_type* _window;
     public:
         
         window(
@@ -42,6 +58,11 @@ namespace core
         void set_size(
             const size_type w, 
             const size_type h);
+    };
+
+    class surface
+    {
+
     };
 }
 }
