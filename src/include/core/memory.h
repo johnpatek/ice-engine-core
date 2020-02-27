@@ -174,6 +174,7 @@ public:
     }
 };
 
+//todo: create stack_allocator
 template<int size> struct stack_buffer : public std::array<byte_type,size>
 {
 
