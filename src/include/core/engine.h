@@ -11,15 +11,15 @@ namespace core
     class engine
     {
     private:
-        std::unique_ptr<ice::core::thread_pool> _thread_pool;
+        std::shared_ptr<ice::core::thread_pool> _thread_pool;
     public:
         engine(const ice::core::size_type threads = std::thread::hardware_concurrency());
         
-        engine(const engine& other) = delete;
+        engine(const engine& other) = default;
         
         engine(engine&& other) = default;
 
-        ~engine();
+        ~engine() = default;
     };
 }
 }
