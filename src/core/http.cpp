@@ -6,11 +6,19 @@ ice::core::http_client::http_client(
     const int port)
 {
     _engine = engine;
-
+    
+    std::string address(host);
+    
+    // We need to add the port number if it's not 80
+    if(port != DEFAULT_HTTP_PORT)
+    {
+        address.append(":");
+        address.append(std::to_string(port));
+    }
+    
     _base_url = std::string(
         "http://" 
-        + host + ":" 
-        + std::to_string(port));
+        + address);
 }
 
 ice::core::string_type ice::core::http_client::get_request(
@@ -33,13 +41,13 @@ ice::core::string_type ice::core::http_client::get_request(
     }
     
     request.setOpt(
-        new curlpp::options::Url(
+        curlpp::options::Url(
             _base_url 
             + path));
     
-    request.setOpt(new curlpp::options::HttpHeader(request_headers)); 
+    request.setOpt(curlpp::options::HttpHeader(request_headers)); 
     
-    request.setOpt(new curlpp::options::WriteStream(&ss));
+    request.setOpt(curlpp::options::WriteStream(&ss));
     
     request.perform();
     
@@ -67,17 +75,17 @@ ice::core::string_type ice::core::http_client::post_request(
             + header_pair.second);    
     }
     request.setOpt(
-        new curlpp::options::Url(
+        curlpp::options::Url(
             _base_url
             + path));
 
-    request.setOpt(new curlpp::options::HttpHeader(request_headers)); 
+    request.setOpt(curlpp::options::HttpHeader(request_headers)); 
     
-    request.setOpt(new curlpp::options::WriteStream(&ss));
+    request.setOpt(curlpp::options::WriteStream(&ss));
     
-    request.setOpt(new curlpp::options::PostFields((char*)data));
+    request.setOpt(curlpp::options::PostFields((char*)data));
 
-    request.setOpt(new curlpp::options::PostFieldSize(size));
+    request.setOpt(curlpp::options::PostFieldSize(size));
 
     request.perform();
 
