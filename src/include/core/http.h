@@ -90,11 +90,39 @@ namespace core
 
     class http_server
     {
+    private:
+        std::vector<std::shared_ptr<std::thread>> _threads;
+        std::vector<std::shared_ptr<uv_async_t>> _handles;
+        int _port;
+        size_type _thread_count;
+        void handle_data(
+            uWS::HttpResponse * response,
+            char * data, 
+            size_type size, 
+            size_type remaining);
+    protected:
+        std::shared_ptr<ice::core::engine> _engine;
     public:
+        http_server(
+            const std::shared_ptr<ice::core::engine> engine,
+            const int port = DEFAULT_HTTP_PORT,
+            const size_type threads = std::thread::hardware_concurrency());
 
-        virtual string_type handle_get();
+        ~http_server() = default;
 
-        virtual string_type handle_post();
+        void start();
+
+        void stop();
+
+        virtual string_type handle_get(
+            const string_type& path,
+            const http_headers& headers) = 0;
+
+        virtual string_type handle_post(
+            const string_type & path,
+            const http_headers & headers,
+            const byte_type * data,
+            const size_type size) = 0;
     };
     
 
