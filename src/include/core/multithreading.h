@@ -1,7 +1,7 @@
 #ifndef MULTITHREADING_H
 #define MULTITHREADING_H
-#include "core/memory.h"
-#include "core/types.h"
+#include <core/memory.h>
+#include <core/types.h>
 #include <future>
 #include <queue>
 #include <functional>

@@ -20,6 +20,23 @@ namespace core
         engine(engine&& other) = default;
 
         ~engine() = default;
+
+        template<class F, class... Args>
+        auto execute_async(F&& f, Args&&... args) 
+            -> std::future<typename std::result_of<F(Args...)>::type>
+        {
+            return _thread_pool->enqueue(f,args...);
+        }
+
+        template<class F, class... Args>
+        auto execute(F&& f, Args&&... args) 
+            -> typename std::result_of<F(Args...)>::type
+        {
+            auto future = _thread_pool->enqueue(f,args...);
+            future.wait();
+            return future.get();
+        }
+
     };
 }
 }

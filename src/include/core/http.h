@@ -1,13 +1,14 @@
 #ifndef HTTP_H
 #define HTTP_H
+#include <map>
 #include <sstream>
+#include <core/engine.h>
+#include <core/types.h>
 #include <unordered_map>
 #include <curlpp/cURLpp.hpp>
 #include <curlpp/Easy.hpp>
 #include <curlpp/Options.hpp>
 #include <uWS/uWS.h>
-#include <core/engine.h>
-#include <core/types.h>
 
 namespace ice
 {
@@ -40,7 +41,7 @@ namespace core
      * http_headers headers;
      * headers["Content-Type"] = "application/json"
      */
-    class http_headers : public std::unordered_map<string_type,string_type>
+    class http_headers : public std::map<string_type,string_type>
     {
 
     };
@@ -58,6 +59,7 @@ namespace core
     protected:
         // TODO: add async capabilities
         std::shared_ptr<engine> _engine;
+
         std::string _base_url;
     public:
         
@@ -75,7 +77,15 @@ namespace core
 
         ~http_client() = default;
 
+        std::future<string_type> async_get_request(
+            const string_type & path,
+            const http_headers & headers);
 
+        std::future<string_type> async_post_request(
+            const string_type & path,
+            const http_headers & headers,
+            const byte_type * data,
+            const size_type size);
 
         string_type get_request(
             const string_type & path,

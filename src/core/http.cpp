@@ -21,9 +21,12 @@ ice::core::http_client::http_client(
         + address);
 }
 
-ice::core::string_type ice::core::http_client::get_request(
-    const ice::core::string_type & path,
-    const ice::core::http_headers & headers)
+static ice::core::string_type http_request(
+    const int method,
+    const ice::core::string_type & url,
+    const ice::core::http_headers & headers,
+    const ice::core::byte_type * data,
+    const ice::core::size_type size)
 {
     std::stringstream ss;
     std::list<std::string> request_headers;
@@ -42,16 +45,61 @@ ice::core::string_type ice::core::http_client::get_request(
     
     request.setOpt(
         curlpp::options::Url(
-            _base_url 
-            + path));
+            url));
     
     request.setOpt(curlpp::options::HttpHeader(request_headers)); 
     
     request.setOpt(curlpp::options::WriteStream(&ss));
-    
+
+    if(method == ice::core::POST)
+    {
+        request.setOpt(curlpp::options::PostFields((char*)data));
+
+        request.setOpt(curlpp::options::PostFieldSize(size));
+    }
+
     request.perform();
     
     return ss.str();
+}
+
+std::future<ice::core::string_type> ice::core::http_client::async_get_request(
+    const ice::core::string_type & path,
+    const ice::core::http_headers & headers)
+{
+    return _engine->execute_async(
+        http_request,
+        ice::core::http_methods::GET,
+        _base_url + path, 
+        headers,
+        (ice::core::byte_type*)NULL,
+        0);
+}
+
+std::future<ice::core::string_type> ice::core::http_client::async_post_request(
+    const ice::core::string_type & path,
+    const ice::core::http_headers & headers,
+    const ice::core::byte_type * data,
+    const ice::core::size_type size)
+{
+   return _engine->execute_async(
+        http_request,
+        ice::core::http_methods::POST,
+        _base_url + path, 
+        headers,
+        data, 
+        size);
+}
+
+ice::core::string_type ice::core::http_client::get_request(
+    const ice::core::string_type & path,
+    const ice::core::http_headers & headers)
+{
+    auto future = async_get_request(
+        path,
+        headers);
+    future.wait();
+    return future.get();
 }
 
 ice::core::string_type ice::core::http_client::post_request(
@@ -60,36 +108,13 @@ ice::core::string_type ice::core::http_client::post_request(
     const byte_type * data,
     const size_type size)
 {
-    std::stringstream ss;
-    std::list<std::string> request_headers;
-    curlpp::Cleanup cleanup;
-    curlpp::Easy request;
-    typedef std::pair<
-        ice::core::string_type,
-        ice::core::string_type> pair_type;
-    for(const pair_type & header_pair : headers)
-    {
-        request_headers.push_back(
-            header_pair.first 
-            + ": " 
-            + header_pair.second);    
-    }
-    request.setOpt(
-        curlpp::options::Url(
-            _base_url
-            + path));
-
-    request.setOpt(curlpp::options::HttpHeader(request_headers)); 
-    
-    request.setOpt(curlpp::options::WriteStream(&ss));
-    
-    request.setOpt(curlpp::options::PostFields((char*)data));
-
-    request.setOpt(curlpp::options::PostFieldSize(size));
-
-    request.perform();
-
-    return ss.str();
+    auto future = async_post_request(
+        path,
+        headers,
+        data,
+        size);
+    future.wait();
+    return future.get();
 }
 
 struct http_data
